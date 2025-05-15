@@ -1,0 +1,20 @@
+app:
+  name: "my_app"
+  version: "1.0"
+  host: "118.24.79.139"
+  port: 8080
+
+mysql:
+  host: "mysql"
+  port: 3306
+  username: "root"
+  password: "123456"
+  dbname: "my_app"
+#  slaveDns: "root:668904@tcp(localhost:3306)/my_app1?charset=utf8&parseTime=True&loc=Local"
+
+qiniu:
+  accessKey: "pqZNlL95_YC339rmtOd3IhWljQsIWLwblUoZg6qK"
+  secretKey: "cna6t-uYDH2xwaO9xcSGBGw9gfPMAB8g4inbjztF"
+  bucket: "cqupthub"
+  server: "stxr4y35v.hn-bkt.clouddn.com"
+
