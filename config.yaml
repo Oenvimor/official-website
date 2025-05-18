@@ -1,7 +1,7 @@
 app:
   name: "my_app"
   version: "1.0"
-  host: "118.24.79.139"
+  host: "0.0.0.0"
   port: 8080
 
 mysql:
@@ -15,6 +15,6 @@ mysql:
 qiniu:
   accessKey: "pqZNlL95_YC339rmtOd3IhWljQsIWLwblUoZg6qK"
   secretKey: "cna6t-uYDH2xwaO9xcSGBGw9gfPMAB8g4inbjztF"
-  bucket: "cqupthub"
-  server: "stxr4y35v.hn-bkt.clouddn.com"
+  bucket: "cqupt-hub"
+  server: "cqupthub.oenvimor.top"
 

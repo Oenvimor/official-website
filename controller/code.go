@@ -19,6 +19,7 @@ const (
 	CodeProjectExist
 	CodeProjectNotExist
 	CodeGameExist
+	CodeUploadFail
 )
 
 var CodeMsgMap = map[ResCode]string{
@@ -38,6 +39,7 @@ var CodeMsgMap = map[ResCode]string{
 	CodeProjectExist:     "项目已存在",
 	CodeProjectNotExist:  "项目不存在",
 	CodeGameExist:        "游戏已存在",
+	CodeUploadFail:       "上传图片失败",
 }
 
 func (code ResCode) Msg() string {

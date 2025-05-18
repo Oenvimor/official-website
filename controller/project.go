@@ -51,6 +51,13 @@ func AddProjectHandler(c *gin.Context) {
 	var ImageUrl string
 	if projectImage != nil {
 		uploadResults = logic.QiniuUpload(c, accessKey, secretKey, bucket, qiniuServer, projectImage)
+		for _, item := range uploadResults {
+			if item["status"] == "失败" {
+				fmt.Printf("err:%v", item["error"])
+				ResponseError(c, CodeUploadFail)
+				return
+			}
+		}
 		ImageUrl = uploadResults[0]["url"]
 	}
 	// 校验参数
@@ -77,7 +84,7 @@ func AddProjectHandler(c *gin.Context) {
 		return
 	}
 	// 返回响应
-	ResponseSuccess(c, m)
+	ResponseSuccess(c, nil)
 }
 
 func EditProjectHandler(c *gin.Context) {

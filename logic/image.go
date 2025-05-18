@@ -28,7 +28,16 @@ func Upload(c *gin.Context, accessKey string, secretKey string, bucket string, q
 		}
 		if uploadResults[n]["status"] != uploadStatus {
 			// 将图片数据插入数据库
-			err := mysql.Upload(i)
+			count, err := mysql.CheckImageByName(i.FileName)
+			if err != nil {
+				fmt.Println("mysql.CheckImageByName err - ", err)
+				return nil, err
+			}
+			if count > 0 {
+				fmt.Println("秒传成功")
+				return uploadResults, nil
+			}
+			err = mysql.Upload(i)
 			if err != nil {
 				fmt.Println("insert into database failed, err -", err)
 			}
@@ -83,6 +92,8 @@ func QiniuDelete(filename string, accessKey string, secretKey string, bucket str
 
 func QiniuUpload(c *gin.Context, accessKey string, secretKey string, bucket string, qiniuServer string, files []*multipart.FileHeader) []map[string]string {
 	mac := qbox.NewMac(accessKey, secretKey) // 创建mac对象用于上传凭证
+	ret := storage.PutRet{}
+	putExtra := storage.PutExtra{}
 	cfg := storage.Config{
 		Zone:          &storage.ZoneHuanan,
 		UseHTTPS:      false,
@@ -92,17 +103,17 @@ func QiniuUpload(c *gin.Context, accessKey string, secretKey string, bucket stri
 	uploadResults := make([]map[string]string, 0) // 用于存储上传结果
 	// 遍历每个文件并上传
 	for _, file := range files {
-		// 限制不能重复上传
-		count, err := mysql.CheckImageByName(file.Filename)
-		if err != nil {
-			fmt.Println("mysql.CheckImageByName err -", err)
-			return nil
-		}
-		if count > 0 {
+		// 秒传机制
+		bucketManager := storage.NewBucketManager(mac, &cfg)
+		_, err := bucketManager.Stat(bucket, file.Filename)
+		if err == nil {
+			URL := fmt.Sprintf("%s/%s", qiniuServer, file.Filename)
+			fileURL := strings.Replace(URL, "\\", "%5C", -1)
+			fmt.Println("七牛云存在该图片，秒传成功")
 			uploadResults = append(uploadResults, map[string]string{
 				"filename": file.Filename,
-				"status":   "失败",
-				"error":    "图片已存在，无法重复上传",
+				"status":   "秒传成功",
+				"url":      fileURL,
 			})
 			continue
 		}
@@ -144,8 +155,6 @@ func QiniuUpload(c *gin.Context, accessKey string, secretKey string, bucket stri
 		}
 		upToken := putPolicy.UploadToken(mac)
 		// 上传到七牛云
-		ret := storage.PutRet{}
-		putExtra := storage.PutExtra{}
 		key := filepath.Join(file.Filename) // 指定存储路径和文件名
 		err = formUploader.Put(c.Request.Context(), &ret, upToken, key, fileReader, file.Size, &putExtra)
 		if err != nil {
@@ -156,6 +165,7 @@ func QiniuUpload(c *gin.Context, accessKey string, secretKey string, bucket stri
 			})
 			continue
 		}
+		fmt.Println("上传成功")
 		URL := fmt.Sprintf("%s/%s", qiniuServer, ret.Key)
 		fileURL := strings.Replace(URL, "\\", "%5C", -1)
 		uploadResults = append(uploadResults, map[string]string{

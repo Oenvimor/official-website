@@ -15,6 +15,6 @@ mysql:
 qiniu:
   accessKey: "pqZNlL95_YC339rmtOd3IhWljQsIWLwblUoZg6qK"
   secretKey: "cna6t-uYDH2xwaO9xcSGBGw9gfPMAB8g4inbjztF"
-  bucket: "cqupthub"
-  server: "stxr4y35v.hn-bkt.clouddn.com"
+  bucket: "cqupt-hub"
+  server: "cqupthub.oenvimor.top"
 
