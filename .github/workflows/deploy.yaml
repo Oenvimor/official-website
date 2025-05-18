@@ -38,6 +38,18 @@ jobs:
 
     - name: Deploy to Server
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@118.24.79.139 "docker pull cqupthub:v1 && docker run -d --restart unless-stopped -p 2001:8080 --network=cqupthub_net --name cqupthub"
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh -o StrictHostKeyChecking=no ubuntu@118.24.79.139 "
+          # Stop and remove existing container if it exists
+          docker stop cqupthub || true
+          docker rm cqupthub || true
+          # Remove existing image if it exists
+          docker rmi cqupthub:v1 || true
+          # Pull the latest image and run the container
+          docker pull cqupthub:v1
+          docker run -d --restart unless-stopped -p 2001:8080 --network=cqupthub_net --name cqupthub cqupthub:v1
+        "
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
