@@ -53,7 +53,7 @@ func GetImageHandler(c *gin.Context) {
 
 func DeleteImageHandler(c *gin.Context) {
 	// 获取参数
-	id := c.Param("id")
+	id := c.Param("ID")
 	Id, _ := strconv.Atoi(id)
 	// 逻辑处理
 	//// 获取配置参数

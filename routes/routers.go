@@ -16,7 +16,7 @@ func SetRouter() *gin.Engine {
 
 	v1 := r.Group("/image")                                 // 首页设置
 	v1.POST("/uploads", controller.UploadHandler)           // 图片上传到图片库
-	v1.DELETE("/delete/:id", controller.DeleteImageHandler) // 从图片库删除图片
+	v1.DELETE("/delete/:ID", controller.DeleteImageHandler) // 从图片库删除图片
 	v1.GET("/acquire", controller.GetImageHandler)          // 获取图片库所有图片
 	v1.PUT("/homepage", controller.SetHomePageHandler)      // 设置首页图片
 
