@@ -14,11 +14,11 @@ func SetRouter() *gin.Engine {
 	r.POST("/login", controller.LoginHandler)         // 管理员登录
 	r.PUT("/account", controller.EditPasswordHandler) // 修改密码
 
-	v1 := r.Group("/image")                             // 首页设置
-	v1.POST("/uploads", controller.UploadHandler)       // 图片上传到图片库
-	v1.DELETE("/delete", controller.DeleteImageHandler) // 从图片库删除图片
-	v1.GET("/acquire", controller.GetImageHandler)      // 获取图片库所有图片
-	v1.PUT("/homepage", controller.SetHomePageHandler)  // 设置首页图片
+	v1 := r.Group("/image")                                 // 首页设置
+	v1.POST("/uploads", controller.UploadHandler)           // 图片上传到图片库
+	v1.DELETE("/delete/:id", controller.DeleteImageHandler) // 从图片库删除图片
+	v1.GET("/acquire", controller.GetImageHandler)          // 获取图片库所有图片
+	v1.PUT("/homepage", controller.SetHomePageHandler)      // 设置首页图片
 
 	v2 := r.Group("/department")                                 // 部门管理
 	v2.GET("/acquire", controller.GetDepartmentHandler)          // 获取部门信息

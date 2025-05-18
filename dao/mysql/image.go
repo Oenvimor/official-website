@@ -11,8 +11,8 @@ func Upload(record *models.ImageRecord) error {
 	return nil
 }
 
-func Delete(filename string) error {
-	if err := db.Where("file_name = ?", filename).Delete(&models.ImageRecord{}).Error; err != nil {
+func Delete(Id int) error {
+	if err := db.Where("id = ?", Id).Delete(&models.ImageRecord{}).Error; err != nil {
 		return err
 	}
 	return nil

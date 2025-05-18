@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 func UploadHandler(c *gin.Context) {
@@ -52,14 +53,8 @@ func GetImageHandler(c *gin.Context) {
 
 func DeleteImageHandler(c *gin.Context) {
 	// 获取参数
-	var request struct {
-		Filename string `json:"file_name"`
-	}
-	if err := c.ShouldBindJSON(&request); err != nil {
-		fmt.Println("get file failed -", err)
-		ResponseError(c, CodeGetImageFail)
-		return
-	}
+	id := c.Param("id")
+	Id, _ := strconv.Atoi(id)
 	// 逻辑处理
 	//// 获取配置参数
 	//cfg := setting.Conf.QiniuConfig
@@ -70,7 +65,7 @@ func DeleteImageHandler(c *gin.Context) {
 	//	ResponseWithMsg(c, CodeDeleteFailed, err.Error())
 	//	return
 	//}
-	if err := logic.Delete(request.Filename); err != nil {
+	if err := logic.Delete(Id); err != nil {
 		ResponseError(c, CodeDeleteFailed)
 		return
 	}

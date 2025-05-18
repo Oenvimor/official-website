@@ -46,8 +46,8 @@ func Upload(c *gin.Context, accessKey string, secretKey string, bucket string, q
 	return uploadResults, nil
 }
 
-func Delete(filename string) error {
-	err := mysql.Delete(filename)
+func Delete(Id int) error {
+	err := mysql.Delete(Id)
 	if err != nil {
 		fmt.Println("delete file failed, err -", err)
 		return err
