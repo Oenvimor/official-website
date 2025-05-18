@@ -61,15 +61,15 @@ func DeleteImageHandler(c *gin.Context) {
 		return
 	}
 	// 逻辑处理
-	// 获取配置参数
-	cfg := setting.Conf.QiniuConfig
-	accessKey := cfg.AccessKey
-	secretKey := cfg.SecretKey
-	bucket := cfg.Bucket
-	if err := logic.QiniuDelete(request.Filename, accessKey, secretKey, bucket); err != nil {
-		ResponseWithMsg(c, CodeDeleteFailed, err.Error())
-		return
-	}
+	//// 获取配置参数
+	//cfg := setting.Conf.QiniuConfig
+	//accessKey := cfg.AccessKey
+	//secretKey := cfg.SecretKey
+	//bucket := cfg.Bucket
+	//if err := logic.QiniuDelete(request.Filename, accessKey, secretKey, bucket); err != nil {
+	//	ResponseWithMsg(c, CodeDeleteFailed, err.Error())
+	//	return
+	//}
 	if err := logic.Delete(request.Filename); err != nil {
 		ResponseError(c, CodeDeleteFailed)
 		return
