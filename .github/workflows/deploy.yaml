@@ -13,6 +13,26 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Update SSH client
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y openssh-client
+
+    - name: Set up SSH
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      run: |
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H 118.24.79.139 >> ~/.ssh/known_hosts
+
+    - name: Test SSH Connection
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      run: |
+        ssh -o BatchMode=yes -o ConnectTimeout=30 -o StrictHostKeyChecking=no ubuntu@118.24.79.139 "echo 'SSH connection successful!'"
+
     - name: Set up Go
       uses: actions/setup-go@v2
       with:
@@ -36,19 +56,6 @@ jobs:
 
     - name: Push Docker image to Docker Hub
       run: docker push oenvimor/website:v1
-
-    - name: Update SSH client
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y openssh-client
-
-    - name: Set up SSH
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-      run: |
-        mkdir -p ~/.ssh
-        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
 
     - name: Deploy to Server
       run: |
