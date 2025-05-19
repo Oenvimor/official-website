@@ -60,16 +60,14 @@ jobs:
     - name: Deploy to Server
       run: |
         ssh -o StrictHostKeyChecking=no ubuntu@118.24.79.139 "
-          # Change to root Permission
-          su root
           # Open the clash proxy
-          bash start.sh
+          sudo bash start.sh
           # Stop and remove existing container if it exists
-          docker stop cqupthub || true
-          docker rm cqupthub || true
+          sudo docker stop cqupthub || true
+          sudo docker rm cqupthub || true
           # Remove existing image if it exists
-          docker rmi oenvimor/website:v1 || true
+          sudo docker rmi oenvimor/website:v1 || true
           # Pull the latest image and run the container
-          docker pull oenvimor/website:v1
-          docker run -d --restart unless-stopped -p 2001:8080 --network=cqupthub_net --name cqupthub oenvimor/website:v1
+          sudo docker pull oenvimor/website:v1
+          sudo docker run -d --restart unless-stopped -p 2001:8080 --network=cqupthub_net --name cqupthub oenvimor/website:v1
         "
