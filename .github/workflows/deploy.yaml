@@ -60,6 +60,10 @@ jobs:
     - name: Deploy to Server
       run: |
         ssh -o StrictHostKeyChecking=no ubuntu@118.24.79.139 "
+          # Change to root Permission
+          su root
+          # Open the clash proxy
+          bash start.sh
           # Stop and remove existing container if it exists
           docker stop cqupthub || true
           docker rm cqupthub || true
